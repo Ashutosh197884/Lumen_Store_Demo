@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, Navigate, NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { Link, Navigate, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
   ClipboardList, LayoutDashboard, LogOut, Menu, Package, Boxes, Store, Users, X,
 } from 'lucide-react'
@@ -18,6 +18,7 @@ const items = [
 export default function AdminLayout() {
   const { isAdmin, logout } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [open, setOpen] = useState(false)
 
   if (!isAdmin) return <Navigate to="/admin/login" replace />
@@ -70,8 +71,8 @@ export default function AdminLayout() {
       {/* Mobile sidebar */}
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-stone-900/50" onClick={() => setOpen(false)} />
-          <aside className="absolute inset-y-0 left-0 w-72 bg-stone-900 shadow-elevated">
+          <div className="animate-fade-in absolute inset-0 bg-stone-900/50" onClick={() => setOpen(false)} />
+          <aside className="animate-slide-in-left absolute inset-y-0 left-0 w-72 bg-stone-900 shadow-elevated">
             <button type="button" onClick={() => setOpen(false)} className="absolute right-3 top-4 grid size-9 place-items-center rounded-lg text-stone-400 hover:bg-white/10" aria-label="Close menu">
               <X className="size-5" />
             </button>
@@ -93,7 +94,7 @@ export default function AdminLayout() {
           </div>
         </header>
 
-        <main className="p-4 sm:p-6 lg:p-8">
+        <main key={location.pathname} className="animate-fade-in p-4 sm:p-6 lg:p-8">
           <Outlet />
         </main>
       </div>

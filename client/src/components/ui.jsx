@@ -1,8 +1,10 @@
-import { Star, StarHalf } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { CheckCircle2, Star, StarHalf } from 'lucide-react'
 import { cx } from '../lib/cx'
 import { money } from '../lib/format'
 import { ORDER_STATUS } from '../lib/orderStatus'
 import { CATEGORY_MAP } from '../data/seedProducts'
+import { subscribeToast } from '../lib/toast'
 
 /* ---------- Brand mark ---------- */
 export const Logo = ({ dark = false, small = false }) => (
@@ -94,15 +96,83 @@ export const QtyStepper = ({ value, onChange, max = 99, size = 'md' }) => {
   )
 }
 
+/* ---------- Motion helpers ---------- */
+export const Reveal = ({ as: Tag = 'div', delay = 0, className, children, ...rest }) => {
+  const ref = useRef(null)
+  const [vis, setVis] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (typeof IntersectionObserver === 'undefined') {
+      setVis(true)
+      return
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVis(true)
+          io.disconnect()
+        }
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  return (
+    <Tag
+      ref={ref}
+      className={cx('reveal', vis && 'is-visible', className)}
+      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
+      {...rest}
+    >
+      {children}
+    </Tag>
+  )
+}
+
+/* ---------- Toasts ---------- */
+export const ToastHost = () => {
+  const [toasts, setToasts] = useState([])
+
+  useEffect(
+    () =>
+      subscribeToast((t) => {
+        setToasts((prev) => [...prev.slice(-2), t])
+        setTimeout(() => setToasts((prev) => prev.filter((x) => x.id !== t.id)), 2400)
+      }),
+    []
+  )
+
+  if (toasts.length === 0) return null
+  return (
+    <div className="pointer-events-none fixed inset-x-0 bottom-6 z-[100] flex flex-col items-center gap-2 px-4">
+      {toasts.map((t) => (
+        <div
+          key={t.id}
+          role="status"
+          className="animate-slide-up pointer-events-auto flex max-w-full items-center gap-2 rounded-full bg-stone-900/95 py-2.5 pl-4 pr-5 text-sm font-semibold text-white shadow-elevated backdrop-blur"
+        >
+          <CheckCircle2 className="size-4 shrink-0 text-emerald-400" />
+          <span className="truncate">{t.message}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 /* ---------- Feedback ---------- */
 export const Spinner = ({ className }) => (
   <span className={cx('inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent align-middle', className)} aria-label="Loading" />
 )
 
 export const Loader = ({ label = 'Loading…' }) => (
-  <div className="flex flex-col items-center justify-center gap-3 py-24 text-stone-400">
-    <Spinner className="size-6 text-brand-600" />
-    <p className="text-sm">{label}</p>
+  <div className="flex flex-col items-center justify-center gap-4 py-24" role="status" aria-label={label}>
+    <div className="animate-float grid size-12 place-items-center rounded-2xl bg-brand-600 text-lg font-bold text-white shadow-lg shadow-brand-600/30">L</div>
+    <div className="h-3 w-28 animate-shimmer rounded-full bg-gradient-to-r from-stone-200 via-stone-100 to-stone-200" />
+    <p className="text-sm text-stone-400">{label}</p>
   </div>
 )
 

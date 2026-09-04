@@ -4,7 +4,7 @@ import { PackageSearch, SlidersHorizontal, X } from 'lucide-react'
 import { api } from '../lib/api'
 import { useFetch } from '../lib/useFetch'
 import ProductCard from '../components/ProductCard'
-import { EmptyState, Loader, Select } from '../components/ui'
+import { EmptyState, Loader, Reveal, Select } from '../components/ui'
 import { CATEGORIES } from '../data/seedProducts'
 import { cx } from '../lib/cx'
 
@@ -42,7 +42,7 @@ export default function ShopPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
-      <div className="mb-8">
+      <div className="animate-fade-in-up mb-8">
         <p className="text-xs font-bold uppercase tracking-widest text-brand-600">Catalogue</p>
         <h1 className="mt-1 font-display text-3xl font-bold text-stone-900 sm:text-4xl">
           {q ? <>Results for “{q}”</> : category === 'all' ? 'All products' : `${CATEGORIES.find((c) => c.slug === category)?.name} `}
@@ -112,11 +112,11 @@ export default function ShopPage() {
             />
           )}
           {!loading && products?.length > 0 && (
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
+            <div key={`${category}-${q}-${sort}`} className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
               {products.map((p, i) => (
-                <div key={p.id} className={cx('animate-fade-in-up', `delay-${Math.min(i, 4)}`)}>
+                <Reveal key={p.id} delay={Math.min(i, 8) * 40}>
                   <ProductCard product={p} />
-                </div>
+                </Reveal>
               ))}
             </div>
           )}

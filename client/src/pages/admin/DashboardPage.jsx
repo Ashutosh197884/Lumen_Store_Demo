@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { AlertTriangle, ArrowRight, ClipboardList, DollarSign, Package, Users } from 'lucide-react'
 import { api } from '../../lib/api'
 import { useFetch } from '../../lib/useFetch'
-import { Loader, PageHeader, Pill, StatCard, StatusPill, Td, Th } from '../../components/ui'
+import { Loader, PageHeader, Pill, Reveal, StatCard, StatusPill, Td, Th } from '../../components/ui'
 import { money, timeAgo } from '../../lib/format'
 import { STORE } from '../../lib/settings'
 
@@ -23,16 +23,22 @@ export default function DashboardPage() {
       />
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard icon={<DollarSign className="size-5" />} label="Revenue" value={money(stats.revenue)} sub={`${stats.last7Orders} orders in last 7 days`} />
-        <StatCard icon={<ClipboardList className="size-5" />} label="Orders" value={stats.orders} sub={`${stats.pendingOrders} awaiting fulfilment`} accent="text-sky-600" />
-        <StatCard icon={<Users className="size-5" />} label="Customers" value={stats.customers} sub="Across all orders" accent="text-violet-600" />
-        <StatCard
-          icon={<Package className="size-5" />}
-          label="Products"
-          value={stats.products}
-          sub={`${stats.outOfStock} sold out`}
-          accent={stats.lowStock > 0 ? 'text-red-500' : 'text-emerald-600'}
-        />
+        {[
+          { icon: <DollarSign className="size-5" />, label: 'Revenue', value: money(stats.revenue), sub: `${stats.last7Orders} orders in last 7 days` },
+          { icon: <ClipboardList className="size-5" />, label: 'Orders', value: stats.orders, sub: `${stats.pendingOrders} awaiting fulfilment`, accent: 'text-sky-600' },
+          { icon: <Users className="size-5" />, label: 'Customers', value: stats.customers, sub: 'Across all orders', accent: 'text-violet-600' },
+          {
+            icon: <Package className="size-5" />,
+            label: 'Products',
+            value: stats.products,
+            sub: `${stats.outOfStock} sold out`,
+            accent: stats.lowStock > 0 ? 'text-red-500' : 'text-emerald-600',
+          },
+        ].map((c, i) => (
+          <Reveal key={c.label} delay={i * 70}>
+            <StatCard {...c} />
+          </Reveal>
+        ))}
       </div>
 
       {stats.lowStock > 0 && (
@@ -49,13 +55,13 @@ export default function DashboardPage() {
         {/* Revenue chart */}
         <section className="rounded-2xl border border-stone-200 bg-white p-6 shadow-card">
           <h2 className="font-display text-lg font-bold text-stone-900">Revenue · last 7 days</h2>
-          <div className="mt-6 flex h-44 items-end gap-3">
-            {byDay.map((d) => (
+          <div className="mt-6 flex h-44 gap-3">
+            {byDay.map((d, i) => (
               <div key={d.day} className="group flex flex-1 flex-col items-center gap-2" title={`${money(d.revenue)} · ${d.orders} orders`}>
                 <div className="relative flex w-full flex-1 items-end">
                   <div
-                    className="w-full rounded-t-lg bg-gradient-to-t from-brand-600 to-brand-400 transition group-hover:from-brand-700 group-hover:to-brand-500"
-                    style={{ height: `${Math.max(4, (d.revenue / maxDay) * 100)}%` }}
+                    className="animate-grow-y w-full rounded-t-lg bg-gradient-to-t from-brand-600 to-brand-400 transition group-hover:from-brand-700 group-hover:to-brand-500"
+                    style={{ height: `${Math.max(4, (d.revenue / maxDay) * 100)}%`, animationDelay: `${i * 80}ms` }}
                   />
                 </div>
                 <span className="text-xs font-semibold text-stone-400">{d.day}</span>
@@ -79,8 +85,8 @@ export default function DashboardPage() {
             <p className="mt-4 text-sm text-stone-500">All products are well stocked. 🎉</p>
           ) : (
             <ul className="mt-4 space-y-3">
-              {lowStock.map((p) => (
-                <li key={p.id} className="flex items-center gap-3">
+              {lowStock.map((p, i) => (
+                <li key={p.id} className="animate-fade-in-up flex items-center gap-3" style={{ animationDelay: `${i * 50}ms` }}>
                   <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-stone-100 text-xl">{p.emoji}</span>
                   <div className="min-w-0 flex-1">
                     <Link to={`/admin/products/${p.id}/edit`} className="block truncate text-sm font-bold text-stone-800 hover:text-brand-700">{p.name}</Link>

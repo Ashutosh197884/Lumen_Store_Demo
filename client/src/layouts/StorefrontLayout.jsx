@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, Search, ShoppingCart, X, Truck, Lock } from 'lucide-react'
-import { Logo } from '../components/ui'
+import { Logo, ToastHost } from '../components/ui'
 import { useCart } from '../context/CartContext'
 import { CATEGORIES } from '../data/seedProducts'
 import { STORE } from '../lib/settings'
@@ -17,7 +17,16 @@ export default function StorefrontLayout() {
   const { count } = useCart()
   const [menuOpen, setMenuOpen] = useState(false)
   const [q, setQ] = useState('')
+  const [scrolled, setScrolled] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const submitSearch = (e) => {
     e.preventDefault()
@@ -33,7 +42,7 @@ export default function StorefrontLayout() {
       </div>
 
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-stone-200 bg-white/90 backdrop-blur">
+      <header className={cx('sticky top-0 z-40 border-b bg-white/90 backdrop-blur transition-shadow duration-300', scrolled ? 'border-stone-200 shadow-md shadow-stone-900/5' : 'border-transparent')}>
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6">
           <button type="button" className="grid size-10 place-items-center rounded-lg text-stone-600 hover:bg-stone-100 lg:hidden" onClick={() => setMenuOpen((v) => !v)} aria-label="Toggle menu">
             {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -68,7 +77,7 @@ export default function StorefrontLayout() {
             <Link to="/cart" className="relative grid size-10 place-items-center rounded-lg text-stone-700 hover:bg-stone-100" aria-label={`Cart, ${count} items`}>
               <ShoppingCart className="size-5" />
               {count > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 grid min-w-5 place-items-center rounded-full bg-brand-600 px-1 text-[11px] font-bold text-white">
+                <span key={count} className="animate-pop absolute -right-0.5 -top-0.5 grid min-w-5 place-items-center rounded-full bg-brand-600 px-1 text-[11px] font-bold text-white">
                   {count}
                 </span>
               )}
@@ -78,7 +87,7 @@ export default function StorefrontLayout() {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <div className="border-t border-stone-200 bg-white px-4 pb-4 pt-2 lg:hidden">
+          <div className="animate-fade-in-up border-t border-stone-200 bg-white px-4 pb-4 pt-2 lg:hidden">
             <form onSubmit={submitSearch} className="mb-3">
               <div className="relative">
                 <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-stone-400" />
@@ -101,8 +110,8 @@ export default function StorefrontLayout() {
         )}
       </header>
 
-      {/* Page */}
-      <main className="flex-1">
+      {/* Page — keyed by path so each route change replays a gentle fade */}
+      <main key={location.pathname} className="flex-1 animate-fade-in">
         <Outlet />
       </main>
 
@@ -153,6 +162,8 @@ export default function StorefrontLayout() {
           </div>
         </div>
       </footer>
+
+      <ToastHost />
     </div>
   )
 }

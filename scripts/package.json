@@ -3,7 +3,8 @@
   "private": true,
   "description": "Regenerates docs/screenshots/*.png from the running dev server (system Chrome, no browser download)",
   "scripts": {
-    "capture": "node capture.mjs"
+    "capture": "node capture.mjs",
+    "verify-motion": "node verify-motion.mjs"
   },
   "devDependencies": {
     "playwright-core": "^1.54.1"

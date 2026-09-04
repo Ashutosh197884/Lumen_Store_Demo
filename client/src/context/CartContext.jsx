@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { STORE } from '../lib/settings'
+import { toast } from '../lib/toast'
 
 const CartContext = createContext(null)
 const KEY = 'lumen.cart.v1'
@@ -17,7 +18,8 @@ export function CartProvider({ children }) {
     localStorage.setItem(KEY, JSON.stringify(items))
   }, [items])
 
-  const add = (product, qty = 1) =>
+  const add = (product, qty = 1) => {
+    toast(`Added ${product.name} to cart`)
     setItems((prev) => {
       const existing = prev.find((i) => i.productId === product.id)
       if (existing) {
@@ -27,6 +29,7 @@ export function CartProvider({ children }) {
       }
       return [...prev, { productId: product.id, name: product.name, emoji: product.emoji, category: product.category, price: product.price, qty, stock: product.stock }]
     })
+  }
 
   const setQty = (productId, qty) =>
     setItems((prev) =>

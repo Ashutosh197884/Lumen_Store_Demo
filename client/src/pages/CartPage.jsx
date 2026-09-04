@@ -10,7 +10,7 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="mx-auto max-w-2xl px-4 py-20 sm:px-6">
+      <div className="animate-scale-in mx-auto max-w-2xl px-4 py-20 sm:px-6">
         <EmptyState
           icon={<ShoppingBag className="size-12" />}
           title="Your cart is empty"
@@ -32,8 +32,8 @@ export default function CartPage() {
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_360px]">
         {/* Lines */}
         <div className="divide-y divide-stone-200 overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-card">
-          {items.map((it) => (
-            <div key={it.productId} className="flex gap-4 p-4 sm:p-5">
+          {items.map((it, i) => (
+            <div key={it.productId} className="animate-fade-in-up flex gap-4 p-4 sm:p-5" style={{ animationDelay: `${Math.min(i, 5) * 45}ms` }}>
               <Link to={`/product/${it.productId}`} className="shrink-0">
                 <GradientTile product={it} className="size-20 rounded-xl sm:size-24" tileClassName="text-4xl" />
               </Link>
@@ -64,7 +64,7 @@ export default function CartPage() {
                 <Truck className="size-4" /> Add {money(remaining)} more for free shipping
               </p>
               <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-brand-100">
-                <div className="h-full rounded-full bg-brand-500 transition-all" style={{ width: `${progress}%` }} />
+                <div className="animate-grow-width h-full rounded-full bg-brand-500 transition-all" style={{ width: `${progress}%` }} />
               </div>
             </div>
           ) : (
