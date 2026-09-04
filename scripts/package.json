@@ -1,0 +1,11 @@
+{
+  "name": "lumen-screenshots",
+  "private": true,
+  "description": "Regenerates docs/screenshots/*.png from the running dev server (system Chrome, no browser download)",
+  "scripts": {
+    "capture": "node capture.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.54.1"
+  }
+}

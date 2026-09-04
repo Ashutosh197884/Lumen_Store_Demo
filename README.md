@@ -1,5 +1,9 @@
 # Lumen — full e-commerce web app (React storefront + Laravel API blueprint)
 
+![React 19](https://img.shields.io/badge/React%2019-22272E?logo=react&logoColor=61DAFB) ![Vite](https://img.shields.io/badge/Vite-22272E?logo=vite&logoColor=646CFF) ![Tailwind CSS v4](https://img.shields.io/badge/Tailwind%20CSS%20v4-22272E?logo=tailwindcss&logoColor=06B6D4) ![React Router](https://img.shields.io/badge/React%20Router-22272E?logo=reactrouter&logoColor=CA4245)
+
+![Laravel 12](https://img.shields.io/badge/Laravel%2012-22272E?logo=laravel&logoColor=FF2D20) ![MySQL](https://img.shields.io/badge/MySQL-22272E?logo=mysql&logoColor=4479A1) ![Stripe](https://img.shields.io/badge/Stripe-22272E?logo=stripe&logoColor=635BFF) ![PayPal](https://img.shields.io/badge/PayPal-22272E?logo=paypal&logoColor=003087)
+
 A complete, runnable e-commerce application shaped around the three acceptance criteria of a
 typical store brief:
 
@@ -8,6 +12,21 @@ typical store brief:
    (Stripe card + PayPal sandbox contracts included) and demoable in two minutes with zero backend.
 3. **The owner manages products without touching code** — an admin panel with full product
    CRUD, inventory controls, order fulfilment and customer list.
+
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/home.png" alt="Lumen storefront — hero, categories and featured products" width="720" />
+</p>
+
+| Storefront — catalogue | Checkout — PayPal selected |
+|:---:|:---:|
+| <img src="docs/screenshots/shop.png" alt="Catalogue with category filters and sorting" /> | <img src="docs/screenshots/checkout-paypal.png" alt="Checkout with PayPal payment method selected" /> |
+| Admin — dashboard | Admin — no-code product manager |
+| <img src="docs/screenshots/admin-dashboard.png" alt="Admin dashboard with KPIs and 7-day revenue chart" /> | <img src="docs/screenshots/admin-products.png" alt="Admin product manager with add/edit/delete" /> |
+
+> Screenshots are captured from the live demo. Regenerate them anytime with
+> `cd scripts && npm install && npm run capture` (dev server running, system Chrome).
 
 ```
 ┌────────────┐   ┌───────────────────────────────┐   ┌─────────────┐
@@ -64,6 +83,8 @@ lumen-store/
    ├─ app/Models  Controllers/Api  Services  Middleware
    ├─ routes/api.php          endpoint table (see server/docs/api.md)
    └─ tests/Feature/          server-side pricing/stock/status tests
+├─ docs/screenshots/          README images (captured live)
+└─ scripts/                   playwright-core capture script (no browser download)
 ```
 
 ### Why the mock + API split
