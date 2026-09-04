@@ -13,6 +13,21 @@ typical store brief:
 3. **The owner manages products without touching code** — an admin panel with full product
    CRUD, inventory controls, order fulfilment and customer list.
 
+## Live demo
+
+**https://lumen-store-phi.vercel.app** — production deployment of the storefront + admin
+panel (auto-updated on every push to `main`). Try it:
+
+| You want to… | Go to | Credentials |
+| --- | --- | --- |
+| Browse and buy | `/` (home), `/shop`, product pages, cart, checkout | Card `4242 4242 4242 4242` or PayPal `buyer@demo.test` (sandbox) |
+| Run the admin panel | `/admin` | `admin@lumen.test` / `demo` |
+| Track an order | `/orders/<number>` | e.g. `LM-8408` after a test purchase |
+
+> **Note:** the live demo runs the built-in demo backend (in-browser mock of the API),
+> so purchases work without a server. The Laravel API blueprint in [`server/`](server/README.md)
+> is what a production deployment would run instead.
+
 ## Screenshots
 
 <p align="center">
