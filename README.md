@@ -16,7 +16,8 @@ typical store brief:
 ## Live demo
 
 **https://lumen-store-phi.vercel.app** — production deployment of the storefront + admin
-panel (auto-updated on every push to `main`). Try it:
+panel. Redeploy manually with `vercel deploy --prod` from `client/`, or connect this GitHub
+repo in the Vercel dashboard to auto-deploy on every push to `main`. Try it:
 
 | You want to… | Go to | Credentials |
 | --- | --- | --- |
