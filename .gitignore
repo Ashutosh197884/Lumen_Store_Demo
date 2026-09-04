@@ -1,0 +1,23 @@
+# dependencies
+node_modules/
+
+# builds
+dist/
+build/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# logs & temp
+*.log
+.DS_Store
+Thumbs.db
+
+# laravel (when installed inside server/)
+server/vendor/
+server/.env
+server/storage/*.key
+server/public/storage/
+server/node_modules/
